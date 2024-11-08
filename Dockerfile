@@ -12,12 +12,12 @@
 # 3. Login to running container (to update config (vi config/app.json): 
 #	docker exec -ti --user root alpine_timeoff /bin/sh
 # --------------------------------------------------------------------
-FROM debian:latest as reditus-debian-node14
+FROM debian:latest as debian-node14
 
 # #######################################################
 # INIT
 # #######################################################
-# FORÇA o APT-GET a se interar sobre as novidades
+# FORï¿½A o APT-GET a se interar sobre as novidades
 RUN apt-get update
 
 # INSTALA ferramentas de usar HTTPS no debian
@@ -26,7 +26,7 @@ RUN apt-get install -y apt-transport-https \
     curl gnupg2 \
     software-properties-common
 
-# INSTALA o certificado GPGP do repositório NODESOURCE
+# INSTALA o certificado GPGP do repositï¿½rio NODESOURCE
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
 # #######################################################
@@ -44,21 +44,21 @@ ARG CACHEBUST=1
 # APT-GET
 # #######################################################
 
-# FORÇA o APT-GET a re-atualizar as fontes de dados com a nova de NODESOURCE
+# FORï¿½A o APT-GET a re-atualizar as fontes de dados com a nova de NODESOURCE
 RUN apt-get update
 # INSTALA o APT-UTILS
 RUN apt-get install -y --no-install-recommends apt-utils 
 # INSTALA O NODE 14, estabelecido perlo certificado GPGP
 RUN apt-get install -y --no-install-recommends nodejs
-# INSTALA o vim para facilitar caso seja necessário depurar
+# INSTALA o vim para facilitar caso seja necessï¿½rio depurar
 RUN apt-get install -y --no-install-recommends vim
-# INSTALA o midnight commander para facilitar a visualização dos ficheiros em runtime
+# INSTALA o midnight commander para facilitar a visualizaï¿½ï¿½o dos ficheiros em runtime
 RUN apt-get install -y --no-install-recommends mc
-# INSTALA a base do python (Necessário para instalar a biblioteca do sqlite3)
+# INSTALA a base do python (Necessï¿½rio para instalar a biblioteca do sqlite3)
 RUN apt-get install -y --no-install-recommends python
-# INSTALA o pacote build-essential que possui as mais comuns biblioteca e ferramentas de compilação, até do kernel, se preciso.
+# INSTALA o pacote build-essential que possui as mais comuns biblioteca e ferramentas de compilaï¿½ï¿½o, atï¿½ do kernel, se preciso.
 RUN apt-get install -y --no-install-recommends build-essential
-# INSTALA o supervisor. O supervisor funciona como um orquestrador do processo e, se perceber que o app está fora do ar, ele mata o processo e auto-executa.
+# INSTALA o supervisor. O supervisor funciona como um orquestrador do processo e, se perceber que o app estï¿½ fora do ar, ele mata o processo e auto-executa.
 RUN apt-get install -y --no-install-recommends supervisor
 # INSTALA o SUDO
 RUN apt-get install -y sudo
@@ -76,15 +76,15 @@ RUN npm install mysql --save
 # PEDIMOS que o NODE inclua a biblioteca para SQLITE3 na biblioteca de runtime
 RUN npm install sqlite3 --save
 
-# INSTALA o NODEMON usado na depuracao (caso necessário)
+# INSTALA o NODEMON usado na depuracao (caso necessï¿½rio)
 RUN sudo npm install nodemon -g
 
-# INSTALA o ORQUESTRADOR com privilégios de root
+# INSTALA o ORQUESTRADOR com privilï¿½gios de root
 RUN sudo npm install pm2 -g
 
-# Imagem "dependencias" montada com as ferramentas necessárias e o código-fonte!
-# Hora de iniciar a montagem e execução da aplicação em cima desta imagem recém criada...
-FROM reditus-debian-node14 as reditus-debian-node14-app
+# Imagem "dependencias" montada com as ferramentas necessï¿½rias e o cï¿½digo-fonte!
+# Hora de iniciar a montagem e execuï¿½ï¿½o da aplicaï¿½ï¿½o em cima desta imagem recï¿½m criada...
+FROM debian-node14 as debian-node14-app
 
 LABEL org.label-schema.schema-version="1.0"
 LABEL org.label-schema.docker.cmd="docker run -d -p 4000:4000 --name timeoff-management-application --tag timeoff-management-application:latest"
@@ -100,14 +100,14 @@ COPY --chmod=777 ./startup-*.sh /app
 # RUN ls -lsh
 
 # #######################################################
-# EXECUÇÃO
+# EXECUï¿½ï¿½O
 # #######################################################
 
 #ENV PORT=4000
 #ENV NODE_ENV=development
 #ENV NODE_DEBUG=i18n:*,cluster,net,http,fs,tls,module,timers,node,app.js
 
-# PONTO DE EXECUÇÃO
+# PONTO DE EXECUï¿½ï¿½O
 #ENTRYPOINT [ "startup-dev.sh" ]
 #CMD ["startup-dev.sh"]
 
